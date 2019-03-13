@@ -16,15 +16,16 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('file_path');
-            $table->unsignedBigInteger('collection_id');
+            $table->string('url');
+            $table->unsignedBigInteger('collection_id')->nullable();
             $table->foreign('collection_id')->references('id')->on('collections');
-            $table->tinyInteger('main_collection_image')->default(0);
-            $table->unsignedBigInteger('product_id');
+            $table->tinyInteger('main_collection_image')->default(0)->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
-            $table->tinyInteger('main_product_image');
-            $table->unsignedBigInteger('article_id');
+            $table->tinyInteger('main_product_image')->nullable();
+            $table->unsignedBigInteger('article_id')->nullable();
             $table->foreign('article_id')->references('id')->on('articles');
-            $table->tinyInteger('main_article_image');
+            $table->tinyInteger('main_article_image')->nullable();
             $table->timestamps();
         });
     }

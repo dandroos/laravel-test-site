@@ -8,7 +8,9 @@
         <label for="title">Title</label>
         <input type="text" id="title" name="title" placeholder="Title" value="{{ $article->title }}">
         
-        <img src="{{ asset($article->img_url) }}" alt="Post image" style="max-width: 80%;">
+        @if($article->image)
+            <img src="{{ asset($article->image->url) }}" alt="Post image" style="max-width: 80%;">
+        @endif
         <label for="file">Replace featured image?</label>
         <input type="file" name="featured_image">
         

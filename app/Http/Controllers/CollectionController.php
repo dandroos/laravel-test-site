@@ -14,8 +14,10 @@ class CollectionController extends Controller
 {
     public function show_all_collections(){
         $collections = Collection::all()->take(10);
-        $main_collection_images = Image::where('main_collection_image', 1);
-        return view('collection_list')->with('collections', $collections)->with('main_collection_images', $main_collection_images);
+        foreach($collections as $collection){
+            $collection->image = Image::where('main_collection_image', 1)->where('collection_id', $collection->id)->first();
+        }
+        return view('collection_list')->with('collections', $collections);
     }
 
     public function show_create(){
@@ -43,7 +45,8 @@ class CollectionController extends Controller
 
         $image = new Image;
         $path = $request->file('collection_image')->store('public/img/uploaded/collection_imgs');
-        $image->file_path = str_replace('public', 'storage', $path);
+        $image->file_path = $path;
+        $image->url = str_replace('public', 'storage', $path);
         $image->collection_id = $collection->id;
         $image->main_collection_image = 1;
         $image->save();
@@ -80,7 +83,8 @@ class CollectionController extends Controller
             
             $image = new Image;
             $path = $request->file('collection_image')->store('public/img/uploaded/collection_imgs');
-            $image->file_path = str_replace("public", "storage", $path);
+            $image->file_path = $path;
+            $image->url = str_replace('public', 'storage', $path);
             $image->collection_id = $request->id;
             $image->main_collection_image = 1;
             $image->save();

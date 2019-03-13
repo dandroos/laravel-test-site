@@ -24,8 +24,9 @@
                     </a>
                     <a href="{{ route('product_view', [ 'id' => $product->id])}}">
                         @foreach($product_images as $product_image)
-                            @if($product_image->product_id === $product->id)
-                                <img src="{{ asset($product_image->file_path)}}" alt="product image" style="max-width: 65%;">
+                            @if($product_image->product_id == $product->id)
+                                <img src="{{ asset($product_image->url)}}" alt="product image" style="max-width: 65%;">
+                                
                                 @break
                             @endif
                         @endforeach

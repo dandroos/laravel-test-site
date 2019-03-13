@@ -13,10 +13,10 @@
         <div>
             @if($product)
                 <h4>{{ $collection->name }}</h4>
-                <img src="{{ asset($main_product_image->file_path)}}" alt="product image" style="max-width: 65%;">
+                <img src="{{ asset($main_product_image->url)}}" alt="product image" style="max-width: 65%;">
                 @if($additional_product_images)
                     @foreach($additional_product_images as $additional_product_image)
-                        <img src="{{ asset($additional_product_image->file_path)}}" alt="product image" style="max-width: 65%;">
+                        <img src="{{ asset($additional_product_image->url)}}" alt="product image" style="max-width: 65%;">
                     @endforeach
                 @endif
                 <div>{!! nl2br($product->description) !!}</div>

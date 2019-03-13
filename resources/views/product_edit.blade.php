@@ -23,7 +23,7 @@
         <textarea id="description" name="description" rows="10">{{ $product->description }}</textarea>
         <label for="price">Price</label>
         <input type="text" name="price" id="price" value="{{ $product->price }}">
-        <img src="{{ asset($main_product_image->file_path) }}" alt="Main product image">
+        <img src="{{ asset($main_product_image->url) }}" alt="Main product image">
         <label for="product_image">Replace product image</label>
         <input type="file" name="product_image" id="product_image">
         <label for="add_product_images">Upload additional product images</label>
@@ -37,10 +37,11 @@
     </form>
     @if($additional_product_images)
             @foreach($additional_product_images as $additional_product_image)
-                <img src="{{ asset($additional_product_image->file_path) }}" alt="Additional product image">
+                <img src="{{ asset($additional_product_image->url) }}" alt="Additional product image">
                 <form action="{{ route('image_delete')  }}" method="post">
                     <input type = "hidden" name = "_token" value = "<?php echo csrf_token() ?>">
                     <input type = "hidden" name = "image_id" value = "{{ $additional_product_image->id }}">
+                    <input type = "hidden" name = "product_id" value = "{{ $product->id }}">
                     <input type = "submit" value = "Delete image">
                 </form>
             @endforeach

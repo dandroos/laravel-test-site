@@ -13,7 +13,7 @@
         <label for="name">Collection name</label>
         <input type="text" id="name" name="name" value="{{ $collection->name }}">
         
-        <img src="{{ asset($main_collection_image->file_path) }}" alt="Collection image" style="max-width: 80%;">
+        <img src="{{ asset($main_collection_image->url) }}" alt="Collection image" style="max-width: 80%;">
         <label for="collection_image">Replace collection image?</label>
         <input type="file" name="collection_image" id="collection_image">
         

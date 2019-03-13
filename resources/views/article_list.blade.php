@@ -13,12 +13,9 @@
         <div>
             @if(count($articles) > 0)
                 @foreach ($articles as $article)
-                    @foreach($article_images as $article_image)
-                        @if($article_image->article_id === $article->id)
-                            <img src="{{ asset($article_image->file_path)}}" alt="article featured image" style="max-width: 65%;">
-                            @break
-                        @endif
-                    @endforeach
+                    @if($article->image)
+                        <img src="{{ asset($article->image->url)}}" alt="article featured image" style="max-width: 65%;">
+                    @endif
                     <h3>{{ $article->title }}</h3>
                     <div>{{ $article->created_at->format('jS F Y') }}</div>
                     <div>{!! nl2br($article->body) !!}</div>

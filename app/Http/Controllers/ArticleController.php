@@ -6,23 +6,26 @@ use Illuminate\Http\Request;
 use App\Article;
 use App\Image;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function show_all(){
         $articles = Article::all()->sortByDesc('created_at')->take(5);
-        $article_images = Image::where('main_article_image', 1)->get();
-        return view('article_list')->with('articles', $articles)->with('article_images', $article_images);
+        foreach($articles as $article){
+            $article->image = Image::where('main_article_image', 1)-> where('article_id', $article->id)->first();
+        }
+        return view('article_list')->with('articles', $articles);
     }
 
     public function showCreate(){
         return view('article_create');
     }
     
-    public function find($id){
+    public function edit($id){
         $article = Article::where('id', $id)->first();
-        $article_image = Image::where('article_id', $id)->first();
-        return view('article_edit')->with('article', $article)->with('article_image', $article_image);
+        $article->image = Image::where('article_id', $id)->first();
+        return view('article_edit')->with('article', $article);
     }
 
     public function create(Request $request){
@@ -41,7 +44,8 @@ class ArticleController extends Controller
         if($request->featured_image){
             $image = new Image;
             $path = $request->file('featured_image')->store('public/img/uploaded/article_imgs');
-            $image->file_path = str_replace("public", "storage", $path);
+            $image->file_path = $path;
+            $image->url = str_replace('public', 'storage', $path);
             $image->main_article_image = 1;
             $image->article_id = $article->id;
             $image->save();
@@ -68,7 +72,8 @@ class ArticleController extends Controller
 
             $image = new Image;
             $path = $request->file('featured_image')->store('public/img/uploaded/article_imgs');
-            $image->file_path = str_replace("public", "storage", $path);
+            $image->file_path = $path;
+            $image->url = str_replace('public', 'storage', $path);
             $image->main_article_image = 1;
             $image->article_id = $request->id;
             $image->save();
@@ -78,6 +83,9 @@ class ArticleController extends Controller
     }
 
     public function delete(Request $request){
+        $image_to_delete = Image::where('article_id', $request->id)->first();
+        Storage::delete($image_to_delete->file_path);
+        $image_to_delete->delete();
         Article::where('id', $request->id)->delete();
         return Redirect::route('news')->with('message', 'News story deleted');
     }

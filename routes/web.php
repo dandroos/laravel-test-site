@@ -45,7 +45,7 @@ Route::post('/news/create', [
 
 Route::get('/news/edit/{id}', [
     'as' => 'news_edit',
-    'uses' => 'ArticleController@find'
+    'uses' => 'ArticleController@edit'
 ])->middleware('auth');
 
 Route::post('/news/edit/', [
@@ -90,7 +90,7 @@ Route::post('/collections/delete', [
 
 Route::get('/products/create/{id}', [
     'as' => 'product_create',
-    'uses' => 'ProductController@showCreate'
+    'uses' => 'ProductController@show_create'
 ]);
 
 Route::post('/products/create', [
@@ -99,7 +99,7 @@ Route::post('/products/create', [
 
 Route::get('/products/{id}', [
     'as' => 'product_view',
-    'uses' => 'ProductController@showOne'
+    'uses' => 'ProductController@show_one'
 ]);
 
 Route::get('/products/edit/{id}', [

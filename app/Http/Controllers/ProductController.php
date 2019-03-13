@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function showOne($id){
+    public function show_one($id){
         $product = Product::find($id);
         $main_product_image = Image::where('product_id', $id)->where('main_product_image', 1)->first();
         $additional_product_images = Image::where('product_id', $id)->where('main_product_image', 0)->get();
@@ -23,7 +23,7 @@ class ProductController extends Controller
         ->with('additional_product_images', $additional_product_images);
     }
 
-    public function showCreate($id){
+    public function show_create($id){
         $collections = Collection::all();
         return view('product_create')->with('collections', $collections)->with('autofill_id', $id);
     }
@@ -51,7 +51,8 @@ class ProductController extends Controller
         $image = new Image;
         
         $path = $request->file('product_image')->store('public/img/uploaded/product_imgs');
-        $image->file_path = str_replace('public', 'storage', $path);
+        $image->file_path = $path;
+        $image->url = str_replace('public', 'storage', $path);
         $image->collection_id = $request->collection;
         $image->product_id = $product->id;
         $image->main_product_image = 1;
@@ -63,7 +64,8 @@ class ProductController extends Controller
             foreach($files as $file){
                 $image = new Image;
                 $path = $file->store('public/img/uploaded/product_imgs');
-                $image->file_path = str_replace('public', 'storage', $path);
+                $image->file_path = $path;
+                $image->url = str_replace('public', 'storage', $path);
                 $image->collection_id = $request->collection;
                 $image->product_id = $product->id;
                 $image->main_product_image = 0;
@@ -118,7 +120,8 @@ class ProductController extends Controller
             $main_product_image->delete();
             $image = new Image;
             $path = $request->file('product_image')->store('public/img/uploaded/product_imgs');
-            $image->file_path = str_replace('public', 'storage', $path);
+            $image->file_path = $path;
+            $image->url = str_replace('public', 'storage', $path);
             $image->collection_id = $request->collection;
             $image->product_id = $product->id;
             $image->main_product_image = 1;
@@ -130,7 +133,8 @@ class ProductController extends Controller
             foreach($files as $file){
                 $image = new Image;
                 $path = $file->store('public/img/uploaded/product_imgs');
-                $image->file_path = str_replace('public', 'storage', $path);
+                $image->file_path = $path;
+                $image->url = str_replace('public', 'storage', $path);
                 $image->collection_id = $request->collection;
                 $image->product_id = $product->id;
                 $image->main_product_image = 0;
@@ -141,10 +145,10 @@ class ProductController extends Controller
     }
 
     public function delete_additional_image(Request $request){
-        $image_to_delete = Image::find($request->image_id);
-        Storage::delete($image_to_delete->filepath);
+       
+        $image_to_delete = Image::where('id', $request->image_id)->first();
+        Storage::delete($image_to_delete->file_path);
         $image_to_delete->delete();
-        
         return Redirect::route('product_view', [ 'id' => $request->product_id ])->with('message', 'Image removed');
     }
 

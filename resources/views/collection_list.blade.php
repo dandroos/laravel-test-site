@@ -19,12 +19,9 @@
                     <a href="{{ route('collection_view', [
                         'id' => $collection->id    
                     ])}}">
-                        @foreach($main_collection_images as $main_collection_image)
-                            @if($main_collection_image->collection_id === $collection->id)
-                                <img src="{{ asset($main_collection_image->file_path )}}" alt="collection featured image" style="max-width: 65%;">
-                                @break
-                            @endif
-                        @endforeach
+                        @if($collection->image)
+                            <img src="{{ asset($collection->image->url )}}" alt="collection featured image" style="max-width: 65%;">
+                        @endif
                     </a>
                     <div>{!! nl2br($collection->description) !!}</div>
                     <a href="{{ route('collection_view', [
